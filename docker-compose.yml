@@ -1,5 +1,5 @@
 unbound:
-  image: secns/unbound:1.5.9
+  build: ./
   ports:
   - "53:53/udp"
   - "53:53"
@@ -9,18 +9,18 @@ unbound:
   - DO_UDP=yes
   - DO_TCP=yes
   - VERBOSITY=0
-  - NUM_THREADS=1
-  - SO_RCVBUFF=0
-  - SO_SNDBUF=0
-  - SO_REUSEPORT=no
+  - NUM_THREADS=2
+  - SO_RCVBUFF=4m
+  - SO_SNDBUF=4m
+  - SO_REUSEPORT=yes
   - EDNS_BUFFER_SIZE=4096
-  - MSG_CACHE_SIZE=4m
-  - RRSET_CACHE_SIZE=4m
+  - MSG_CACHE_SIZE=64m
+  - RRSET_CACHE_SIZE=128m
   - CACHE_MIN_TTL=0
-  - CACHE_MAX_TTL=86400
+  - CACHE_MAX_TTL=3600
   - CACHE_MAX_NEGATIVE_TTL=3600
-  - HIDE_IDENTITY=no
-  - HIDE_VERSION=no
+  - HIDE_IDENTITY=yes
+  - HIDE_VERSION=yes
   - STATISTICS_INTERVAL=0
   - STATISTICS_CUMULATIVE=no
   - EXTENDED_STATISTICS=no

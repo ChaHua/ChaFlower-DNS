@@ -1,0 +1,12 @@
+# What local IP the daemon will listen to, with an optional port.
+# The default port is 53. If using systemd, this is not used and must be
+# specified in dnscrypt-proxy.socket.
+DNSCRYPT_PROXY_LOCAL_ADDRESS=127.0.0.1:5301
+
+# Remote DNS(Crypt) resolver.
+# You can find a list of resolvers at
+# /usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv.
+DNSCRYPT_PROXY_RESOLVER_NAME=cisco
+
+# Extra flags to pass to dnscrypt-proxy
+DNSCRYPT_PROXY_OPTIONS="--ephemeral-keys"
