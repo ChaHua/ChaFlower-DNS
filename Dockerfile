@@ -40,7 +40,11 @@ RUN apt-get update && apt-get install -y \
 	&& apt-get update && apt-get -y --force-yes install dnscrypt-proxy  \
 
 	&& git clone --depth=1 https://github.com/felixonmars/dnsmasq-china-list.git \
-	&& cd dnsmasq-china-list && sed -i "s/SERVER=114.114.114.114/SERVER=223.5.5.5/g" Makefile && make unbound \
+	&& cd dnsmasq-china-list \
+	&& sed -e 's|^server=/\(.*\)/114.114.114.114$$|\1|' accelerated-domains.china.conf | egrep -v '^#' > accelerated-domains.china.raw.txt \
+	&& sed -e 's|^server=/\(.*\)/114.114.114.114$$|\1|' google.china.conf | egrep -v '^#' > google.china.raw.txt \
+	&& sed -e 's|\(.*\)|forward-zone:\n  name: "\1."\n  forward-addr: ${DNS_SERVER}\n|' accelerated-domains.china.raw.txt > accelerated-domains.china.unbound.conf
+	&& sed -e 's|\(.*\)|forward-zone:\n  name: "\1."\n  forward-addr: ${DNS_SERVER}\n|' google.china.raw.txt > google.china.unbound.conf
 	&& cp ./accelerated-domains.china.unbound.conf /usr/local/etc/unbound/accelerated-domains.china.unbound.conf \
 	&& cp ./google.china.unbound.conf /usr/local/etc/unbound/google.china.unbound.conf \
 
