@@ -3,6 +3,7 @@ MAINTAINER patrick@oberdorf.net
 
 ENV VERSION 1.5.9
 ENV DEBIAN_FRONTEND noninteractive
+ENV DNS_SERVER 223.5.5.5
 
 WORKDIR /usr/local/src/
 ADD assets/sha256checksum sha256checksum
