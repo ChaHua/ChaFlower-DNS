@@ -56,11 +56,8 @@ ADD assets/dnscrypt-proxy /etc/default/dnscrypt-proxy
 ADD assets/unbound.conf /usr/local/etc/unbound/unbound.conf
 ADD assets/custom.conf /usr/local/etc/unbound/custom.conf
 
-
-RUN chown -R unbound:unbound /usr/local/etc/unbound/
-
-
 RUN useradd --system unbound --home /home/unbound --create-home
+RUN chown -R unbound:unbound /usr/local/etc/unbound/
 ENV PATH $PATH:/usr/local/lib
 RUN ldconfig
 
