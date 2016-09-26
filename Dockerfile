@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
 	byacc \
 	supervisor \
 	subversion \
+	git \
 # RUN wget http://mirrors.xu1s.com/unbound-${VERSION}.tar.gz -P /usr/local/src/ \
 #	&& sha256sum -c sha256checksum \
 #	&& tar -xvf unbound-${VERSION}.tar.gz \
@@ -34,31 +35,23 @@ RUN apt-get update && apt-get install -y \
 	&& make install \
 	&& cd ../ \
 
-	&& apt-get purge -y \
-	build-essential \
-	gcc \
-	gcc-4.8 \
-	cpp \
-	cpp-4.8 \
-	libssl-dev \
-	libevent-dev \
-	libexpat1-dev \
-	subversion \
-
-
 	&& apt-get -y install software-properties-common \
 	&& add-apt-repository ppa:anton+/dnscrypt \
 	&& apt-get update && apt-get -y --force-yes install dnscrypt-proxy  \
 
-	&& apt-get autoremove --purge -y \
+	&& git clone --depth=1 https://github.com/felixonmars/dnsmasq-china-list.git \
+	&& cd dnsmasq-china-list && sed -i "s/SERVER=114.114.114.114/SERVER=223.5.5.5/g" Makefile && make unbound \
+	&& cp ./accelerated-domains.china.unbound.conf /usr/local/etc/unbound/accelerated-domains.china.unbound.conf \
+	&& cp ./google.china.unbound.conf /usr/local/etc/unbound/google.china.unbound.conf \
+
+	&& apt-get autoremove build-essential subversion git --purge -y \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/local/src/*
 
 ADD assets/dnscrypt-proxy /etc/default/dnscrypt-proxy
 ADD assets/unbound.conf /usr/local/etc/unbound/unbound.conf
-ADD assets/dnsmasq-china-list/accelerated-domains.china.unbound.conf /usr/local/etc/unbound/accelerated-domains.china.unbound.conf
-ADD assets/dnsmasq-china-list/google.china.unbound.conf /usr/local/etc/unbound/google.china.unbound.conf
 ADD assets/custom.conf /usr/local/etc/unbound/custom.conf
+
 
 RUN chown -R unbound:unbound /usr/local/etc/unbound/
 
