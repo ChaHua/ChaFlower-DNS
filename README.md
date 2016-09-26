@@ -4,14 +4,17 @@ Unbound (with DNSSEC validation)
 
 # Running
 
-Just use this command to start the container. Unbound will listen on port 53/udp.
+Clone dnsmasq-china-list into assets folder.
 
-```docker run --name unbound -d -p 53:53/udp -p 53:53 secns/unbound:1.5.9```
+```git clone https://github.com/felixonmars/dnsmasq-china-list assets/dnsmasq-china-list```
 
-(optional)
-If you want to override the nameserver in the unbound container, you can use:
+Modify Makefile and build the conf file for unbound.
 
-```docker run --name unbound -d -p 53:53/udp -p 53:53 --dns="127.0.0.1" secns/unbound:1.5.9```
+```cp assets/Makefile assets/dnsmasq-china-list/ && cd assets/dnsmasq-china-list && make unbound```
+
+Run with docker-compose
+
+```docker-compose up -d```
 
 # Configuration
 These options can be set:
